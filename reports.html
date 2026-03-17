@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-8445518571538608">
+  <title>Air Quality Reports | AirAware</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-brand">
+    <img src="assets/logo.png" class="nav-logo" alt="AirAware">
+    <div>
+      <div class="nav-title">AirAware</div>
+      <div class="nav-subtitle">by RGAi Company</div>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="details.html">Details</a></li>
+    <li><a href="forecast.html">Forecast</a></li>
+    <li><a href="eco.html">Eco Actions</a></li>
+    <li><a href="reports.html" class="active">Reports</a></li>
+    <li><a href="awareness.html">Awareness</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button class="btn-theme" id="themeToggle">🌙</button>
+  </div>
+</nav>
+
+<main class="main-content">
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">📊 Analytics</div>
+        <h2 class="section-title">Monthly <span>Air Report</span></h2>
+        <p class="section-desc">Analysis of your city's air quality trends and your personal environmental impact.</p>
+      </div>
+
+      <div class="grid-2">
+        <!-- Air Summary -->
+        <div class="glass-card reveal">
+            <h3 style="margin-bottom:1.5rem;font-family:var(--font-display);">City Summary: Nagpur</h3>
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);">
+                    <div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Average AQI</div>
+                        <div style="font-size:1.8rem;font-weight:800;color:var(--brand-primary);">74</div>
+                    </div>
+                    <span class="badge badge-primary">Moderate</span>
+                </div>
+                <div class="grid-2">
+                    <div class="glass-card" style="padding:1.25rem;background:rgba(0,230,118,0.05);">
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Cleanest Day</div>
+                        <div style="font-weight:700;font-size:1.1rem;margin-top:0.25rem;">March 12</div>
+                        <div style="color:var(--aqi-good);font-weight:800;">32 AQI</div>
+                    </div>
+                    <div class="glass-card" style="padding:1.25rem;background:rgba(244,67,54,0.05);">
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Worst Day</div>
+                        <div style="font-weight:700;font-size:1.1rem;margin-top:0.25rem;">March 04</div>
+                        <div style="color:var(--aqi-very-unhealthy);font-weight:800;">184 AQI</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Score -->
+        <div class="glass-card reveal delay-1">
+            <h3 style="margin-bottom:1.5rem;font-family:var(--font-display);">Personal Impact</h3>
+            <div style="text-align:center;">
+                <div class="stat-number count-up" data-target="92">0%</div>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.5rem;">Personal Eco Efficiency Score</p>
+                
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;">
+                    <div class="glass-card" style="padding:1rem;">
+                        <span style="font-size:1.5rem;">🚲</span>
+                        <div style="font-weight:700;margin-top:0.5rem;">120km</div>
+                        <div style="font-size:0.7rem;color:var(--text-secondary);">Cycled</div>
+                    </div>
+                    <div class="glass-card" style="padding:1rem;">
+                        <span style="font-size:1.5rem;">🌳</span>
+                        <div style="font-weight:700;margin-top:0.5rem;">4 Trees</div>
+                        <div style="font-size:0.7rem;color:var(--text-secondary);">Planted</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Recommendation Card -->
+      <div class="glass-card reveal mt-4" style="background:rgba(0,201,167,0.08);border-left:4px solid var(--brand-primary);">
+          <h3 style="margin-bottom:1rem;font-family:var(--font-display);">Improvement <span>Suggestions</span></h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;">
+              <div style="display:flex;gap:0.75rem;">
+                  <span style="font-size:1.5rem;">🚲</span>
+                  <p style="font-size:0.8rem;line-height:1.5;">Since AQI is often high on Wednesdays, try cycling early in the morning.</p>
+              </div>
+              <div style="display:flex;gap:0.75rem;">
+                  <span style="font-size:1.5rem;">🥗</span>
+                  <p style="font-size:0.8rem;line-height:1.5;">Your CO₂ saving is 15% higher than last month! Keep choseing plant-based meals.</p>
+              </div>
+              <div style="display:flex;gap:0.75rem;">
+                  <span style="font-size:1.5rem;">🏥</span>
+                  <p style="font-size:0.8rem;line-height:1.5;">Based on your activity, Wednesday is the best day for your morning run.</p>
+              </div>
+          </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <div style="font-size:1rem;font-weight:700;color:var(--brand-primary);">🌍 AirAware</div>
+    <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;">
+      Developed by <strong>RGAi Company</strong> | Created by <strong>Gauresh Khairnar</strong>
+    </div>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/animations.js"></script>
+</body>
+</html>

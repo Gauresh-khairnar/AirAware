@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-8445518571538608">
+  <title>Air Quality Details | AirAware</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-brand">
+    <img src="assets/logo.png" class="nav-logo" alt="AirAware">
+    <div>
+      <div class="nav-title">AirAware</div>
+      <div class="nav-subtitle">by RGAi Company</div>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="details.html" class="active">Details</a></li>
+    <li><a href="forecast.html">Forecast</a></li>
+    <li><a href="eco.html">Eco Actions</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="awareness.html">Awareness</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button class="btn-theme" id="themeToggle">🌙</button>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="details.html">🔬 Details</a>
+  <a href="forecast.html">📅 Forecast</a>
+  <a href="eco.html">🌱 Eco Actions</a>
+  <a href="reports.html">📊 Reports</a>
+  <a href="awareness.html">📘 Awareness</a>
+  <a href="about.html">ℹ️ About</a>
+</div>
+
+<main class="main-content">
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🔬 Deep Dive</div>
+        <h2 class="section-title">Pollutant <span>Breakdown</span></h2>
+        <p class="section-desc">Get detailed information about specific air pollutants in your area.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:2fr 1.2fr;gap:2rem;">
+        
+        <!-- Main Stats Card -->
+        <div class="glass-card reveal">
+            <h3 style="margin-bottom:1.5rem;font-family:var(--font-display);">Current Levels</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                
+                <!-- PM2.5 -->
+                <div class="glass-card" style="background:rgba(255,255,255,0.03);padding:1.5rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-weight:700;color:var(--brand-primary);">PM 2.5</span>
+                        <span class="badge badge-primary">Fine Dust</span>
+                    </div>
+                    <div style="font-size:2rem;font-weight:800;margin:0.5rem 0;" id="detPm25">--</div>
+                    <div style="font-size:0.75rem;color:var(--text-secondary);">µg/m³ - Most harmful</div>
+                    <div class="progress-bar"><div class="progress-fill" id="pbPm25" style="width:0%;"></div></div>
+                </div>
+
+                <!-- PM10 -->
+                <div class="glass-card" style="background:rgba(255,255,255,0.03);padding:1.5rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-weight:700;color:var(--brand-secondary);">PM 10</span>
+                        <span class="badge badge-primary">Coarse Dust</span>
+                    </div>
+                    <div style="font-size:2rem;font-weight:800;margin:0.5rem 0;" id="detPm10">--</div>
+                    <div style="font-size:0.75rem;color:var(--text-secondary);">µg/m³ - Respiratory irritant</div>
+                    <div class="progress-bar"><div class="progress-fill" id="pbPm10" style="width:0%;"></div></div>
+                </div>
+
+                <!-- CO -->
+                <div class="glass-card" style="background:rgba(255,255,255,0.03);padding:1.5rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-weight:700;color:#f9a825;">Carbon Monoxide</span>
+                        <span class="badge badge-warn">CO</span>
+                    </div>
+                    <div style="font-size:2rem;font-weight:800;margin:0.5rem 0;" id="detCo">--</div>
+                    <div style="font-size:0.75rem;color:var(--text-secondary);">ppm - Exhaust fumes</div>
+                    <div class="progress-bar"><div class="progress-fill" id="pbCo" style="width:0%;background:#f9a825;"></div></div>
+                </div>
+
+                <!-- NO2 -->
+                <div class="glass-card" style="background:rgba(255,255,255,0.03);padding:1.5rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-weight:700;color:#8e24aa;">Nitrogen Dioxide</span>
+                        <span class="badge badge-warn">NO₂</span>
+                    </div>
+                    <div style="font-size:2rem;font-weight:800;margin:0.5rem 0;" id="detNo2">--</div>
+                    <div style="font-size:0.75rem;color:var(--text-secondary);">ppb - Traffic pollution</div>
+                    <div class="progress-bar"><div class="progress-fill" id="pbNo2" style="width:0%;background:#8e24aa;"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="glass-card reveal delay-1">
+            <h3 style="margin-bottom:1.5rem;font-family:var(--font-display);">Distribution</h3>
+            <div style="height:300px;display:flex;align-items:center;justify-content:center;">
+                <canvas id="pollutantChart"></canvas>
+            </div>
+            <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:1.5rem;text-align:center;">
+                *Calculated distribution based on latest sensor data.
+            </p>
+        </div>
+
+      </div>
+
+      <div class="glass-card reveal mt-4" style="padding:2.5rem;border-left:4px solid var(--brand-primary);">
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:2.5rem;align-items:center;">
+              <div>
+                  <h3 style="font-family:var(--font-display);font-size:1.8rem;">Health <span>Impact</span></h3>
+                  <p style="font-size:0.9rem;color:var(--text-secondary);margin-top:0.5rem;">Protect yourself based on current pollutant levels.</p>
+              </div>
+              <ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                  <li style="display:flex;gap:1rem;align-items:flex-start;">
+                      <span style="font-size:1.5rem;">😷</span>
+                      <div>
+                          <div style="font-weight:700;font-size:0.9rem;">Wear Masks</div>
+                          <div style="font-size:0.8rem;color:var(--text-secondary);">N95 recommended for PM2.5</div>
+                      </div>
+                  </li>
+                  <li style="display:flex;gap:1rem;align-items:flex-start;">
+                      <span style="font-size:1.5rem;">🏠</span>
+                      <div>
+                          <div style="font-weight:700;font-size:0.9rem;">Stay Indoors</div>
+                          <div style="font-size:0.8rem;color:var(--text-secondary);">Seal windows & use purifiers</div>
+                      </div>
+                  </li>
+                  <li style="display:flex;gap:1rem;align-items:flex-start;">
+                      <span style="font-size:1.5rem;">🚴</span>
+                      <div>
+                          <div style="font-weight:700;font-size:0.9rem;">Limit Exercise</div>
+                          <div style="font-size:0.8rem;color:var(--text-secondary);">Avoid heavy exertion outdoors</div>
+                      </div>
+                  </li>
+                  <li style="display:flex;gap:1rem;align-items:flex-start;">
+                      <span style="font-size:1.5rem;">💧</span>
+                      <div>
+                          <div style="font-weight:700;font-size:0.9rem;">Eye Care</div>
+                          <div style="font-size:0.8rem;color:var(--text-secondary);">Rinse eyes if irritation occurs</div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <div style="font-size:1rem;font-weight:700;color:var(--brand-primary);">🌍 AirAware</div>
+    <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;">
+      Developed by <strong>RGAi Company</strong> | Created by <strong>Gauresh Khairnar</strong>
+    </div>
+  </div>
+</footer>
+
+<script src="js/theme.js"></script>
+<script src="js/animations.js"></script>
+<script>
+    // Simple detail population logic
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mock data or load from localStorage if we saved it in app.js
+        setTimeout(() => {
+            const data = { pm25: 42, pm10: 58, co: 0.8, no2: 12 };
+            document.getElementById('detPm25').innerText = data.pm25;
+            document.getElementById('detPm10').innerText = data.pm10;
+            document.getElementById('detCo').innerText = data.co;
+            document.getElementById('detNo2').innerText = data.no2;
+
+            document.getElementById('pbPm25').style.width = '42%';
+            document.getElementById('pbPm10').style.width = '29%';
+            document.getElementById('pbCo').style.width = '15%';
+            document.getElementById('pbNo2').style.width = '22%';
+
+            // Init Chart
+            const ctx = document.getElementById('pollutantChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['PM2.5', 'PM10', 'CO', 'NO2'],
+                    datasets: [{
+                        data: [42, 58, 10, 20],
+                        backgroundColor: ['#00c9a7', '#0077b6', '#f9a825', '#8e24aa'],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#8ba8a0' } } }
+                }
+            });
+        }, 800);
+    });
+</script>
+</body>
+</html>

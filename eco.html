@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-8445518571538608">
+  <title>Eco Actions Tracker | AirAware</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-brand">
+    <img src="assets/logo.png" class="nav-logo" alt="AirAware">
+    <div>
+      <div class="nav-title">AirAware</div>
+      <div class="nav-subtitle">by RGAi Company</div>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="details.html">Details</a></li>
+    <li><a href="forecast.html">Forecast</a></li>
+    <li><a href="eco.html" class="active">Eco Actions</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="awareness.html">Awareness</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button class="btn-theme" id="themeToggle">🌙</button>
+  </div>
+</nav>
+
+<main class="main-content">
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🌱 Impact</div>
+        <h2 class="section-title">Green <span>Actions</span></h2>
+        <p class="section-desc">Log your eco-friendly activities and earn points to protect our planet.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.2fr 2fr;gap:2rem;">
+        
+        <!-- Score Board -->
+        <div class="glass-card reveal text-center" style="padding:2.5rem;background:linear-gradient(135deg, rgba(0,201,167,0.1), rgba(0,119,182,0.1));">
+            <div class="eco-coin" style="font-size:4rem;margin-bottom:1rem;">⭐</div>
+            <h3 style="font-family:var(--font-display);font-size:1.4rem;">Your Eco Score</h3>
+            <div class="stat-number count-up" data-target="850" id="ecoScoreDisplay" style="font-size:4rem;margin-top:0.5rem;">850</div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.5rem;">Level 12: Earth Guardian</p>
+            
+            <div class="progress-bar mt-3"><div class="progress-fill" style="width:75%;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">
+                <span>150 points to Level 13</span>
+            </div>
+
+            <div class="grid-2 mt-4">
+                <div class="glass-card" style="padding:1rem;">
+                    <div style="font-size:1.2rem;font-weight:700;">12</div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary);">Badges</div>
+                </div>
+                <div class="glass-card" style="padding:1rem;">
+                    <div style="font-size:1.2rem;font-weight:700;">2.4k</div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary);">CO₂ Saved (kg)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logging Area -->
+        <div class="glass-card reveal delay-1">
+            <h3 style="margin-bottom:1.5rem;font-family:var(--font-display);">Log Activity</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                
+                <button class="glass-card action-btn" onclick="logAction('🚲 Used bicycle', 20)">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🚲</div>
+                    <div style="font-weight:700;font-size:0.9rem;">Cycle to Work</div>
+                    <div style="font-size:0.75rem;color:var(--brand-primary);">+20 Points</div>
+                </button>
+
+                <button class="glass-card action-btn" onclick="logAction('🚌 Public Transport', 15)">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🚌</div>
+                    <div style="font-weight:700;font-size:0.9rem;">Public Transport</div>
+                    <div style="font-size:0.75rem;color:var(--brand-primary);">+15 Points</div>
+                </button>
+
+                <button class="glass-card action-btn" onclick="logAction('🌳 Planted a Tree', 100)">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🌳</div>
+                    <div style="font-weight:700;font-size:0.9rem;">Planted a Tree</div>
+                    <div style="font-size:0.75rem;color:var(--brand-primary);">+100 Points</div>
+                </button>
+
+                <button class="glass-card action-btn" onclick="logAction('💡 Saved Electricity', 10)">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">💡</div>
+                    <div style="font-weight:700;font-size:0.9rem;">Saved Electricity</div>
+                    <div style="font-size:0.75rem;color:var(--brand-primary);">+10 Points</div>
+                </button>
+
+                <button class="glass-card action-btn" onclick="logAction('🥗 Plant-based meal', 5)">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🥗</div>
+                    <div style="font-weight:700;font-size:0.9rem;">Eco Meal</div>
+                    <div style="font-size:0.75rem;color:var(--brand-primary);">+5 Points</div>
+                </button>
+
+                <button class="glass-card action-btn" onclick="logAction('🔋 Recycled E-Waste', 30)">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🔋</div>
+                    <div style="font-weight:700;font-size:0.9rem;">E-Waste Recycle</div>
+                    <div style="font-size:0.75rem;color:var(--brand-primary);">+30 Points</div>
+                </button>
+            </div>
+        </div>
+
+      </div>
+
+      <!-- Recent Log -->
+      <div class="glass-card reveal mt-4">
+          <h3 style="margin-bottom:1.2rem;font-family:var(--font-display);">Recent Activities</h3>
+          <div id="actionLog" style="display:flex;flex-direction:column;gap:0.75rem;">
+              <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);">
+                  <span>🚲 Cycled 5km for a cleaner commute</span>
+                  <span style="color:var(--brand-primary);font-weight:700;">+20 XP</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:0.75rem 1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);">
+                  <span>🥗 Chose a meat-free afternoon meal</span>
+                  <span style="color:var(--brand-primary);font-weight:700;">+5 XP</span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<style>
+    .action-btn { cursor: pointer; transition: 0.3s; border: 1.5px solid var(--border-glass); width: 100%; text-align: center; }
+    .action-btn:hover { border-color: var(--brand-primary); background: rgba(0,201,167,0.05) !important; transform: scale(1.02); }
+</style>
+
+<script src="js/theme.js"></script>
+<script src="js/animations.js"></script>
+<script>
+    let currentScore = 850;
+    const scoreEl = document.getElementById('ecoScoreDisplay');
+    const logEl = document.getElementById('actionLog');
+
+    window.logAction = (name, pts) => {
+        currentScore += pts;
+        scoreEl.innerText = currentScore;
+        
+        const item = document.createElement('div');
+        item.style.cssText = "display:flex;justify-content:space-between;padding:0.75rem 1rem;background:rgba(0,201,167,0.1);border-radius:var(--radius-sm);animation:slideInRight 0.4s ease;";
+        item.innerHTML = `<span>${name}</span><span style="color:var(--brand-primary);font-weight:700;">+${pts} XP</span>`;
+        logEl.prepend(item);
+
+        // Visual feedback
+        scoreEl.style.transform = "scale(1.1)";
+        scoreEl.style.color = "var(--brand-green)";
+        setTimeout(() => {
+            scoreEl.style.transform = "scale(1)";
+            scoreEl.style.color = "var(--brand-primary)";
+        }, 300);
+    };
+</script>
+</body>
+</html>

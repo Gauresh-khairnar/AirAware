@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AirAware – Real-time Air Quality Monitor. Check live AQI, pollutant levels, health advice and eco-tips. Developed by RGAi Company." />
+  <meta name="google-adsense-account" content="ca-pub-8445518571538608">
+  <meta name="keywords" content="AQI, Air Quality Index, pollution, environment, sustainability, PM2.5, AirAware" />
+  <meta name="author" content="Gauresh Khairnar, RGAi Company" />
+  <meta property="og:title" content="AirAware – Smart Air Quality Monitor" />
+  <meta property="og:description" content="Real-time air quality monitoring and eco-lifestyle tracker." />
+  <title>AirAware – Smart Air Quality Monitor</title>
+
+  <!-- Favicon SVG inline -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%2300c9a7'/><stop offset='100%25' stop-color='%230077b6'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><text y='.9em' font-size='65' text-anchor='middle' x='50' fill='white'>🌍</text></svg>" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
+  <!-- Chart.js & Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+</head>
+<body>
+
+<!-- Page Loader -->
+<div id="page-loader">
+  <img src="assets/logo.png" class="loader-logo" alt="AirAware Logo" onerror="this.style.display='none'">
+  <div style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:700;color:#00c9a7;letter-spacing:-0.02em;">AirAware</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div style="font-size:0.75rem;color:#556b65;">Loading real-time data…</div>
+</div>
+
+<!-- Scroll Progress -->
+<div id="scroll-progress"></div>
+
+<!-- Canvas Background -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ═══════════════════════════════════ NAVBAR ══════ -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-brand">
+    <img src="assets/logo.png" class="nav-logo" alt="AirAware" onerror="this.outerHTML='<span style=\'font-size:1.6rem\'>🌍</span>'">
+    <div>
+      <div class="nav-title">AirAware</div>
+      <div class="nav-subtitle">by RGAi Company</div>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="details.html">Details</a></li>
+    <li><a href="forecast.html">Forecast</a></li>
+    <li><a href="eco.html">Eco Actions</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="awareness.html">Awareness</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button class="btn-theme" id="themeToggle" title="Toggle theme">🌙</button>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="details.html">🔬 Details</a>
+  <a href="forecast.html">📅 Forecast</a>
+  <a href="eco.html">🌱 Eco Actions</a>
+  <a href="reports.html">📊 Reports</a>
+  <a href="awareness.html">📘 Awareness</a>
+  <a href="about.html">ℹ️ About</a>
+</div>
+
+<!-- ═══════════════════════════════════ MAIN ══════════ -->
+<main class="main-content">
+
+  <!-- ── HERO SECTION ──────────────────────────────────── -->
+  <section class="section page-hero" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:6rem 1.5rem 3rem;">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+
+    <!-- Headline -->
+    <div class="text-center reveal" style="max-width:700px;">
+      <div class="section-tag">🌫️ Real-Time Air Quality</div>
+      <h1 class="section-title" style="font-size:clamp(2rem,5vw,3.5rem);margin-top:0.75rem;">
+        Breathe <span>smarter</span>,<br>live <span>greener</span>
+      </h1>
+      <p class="section-desc">
+        Monitor live Air Quality Index, get health alerts, and track your eco-friendly actions — all in one place.
+      </p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-wrap reveal delay-2" style="max-width:520px;width:100%;">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="citySearch" placeholder="Search city… e.g. Mumbai, Delhi, Pune" autocomplete="off" />
+      <button class="search-btn" id="searchBtn">Check</button>
+      <div class="search-suggestions" id="suggestions"></div>
+    </div>
+
+    <!-- Location pill -->
+    <div class="reveal delay-3" style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--text-secondary);">
+      <span class="live-dot" id="liveDot"></span>
+      <span id="currentLocation">Detecting your location…</span>
+      <button onclick="detectLocation()" style="background:none;border:none;color:var(--brand-primary);cursor:pointer;font-size:0.8rem;padding:0.1rem 0.5rem;border-radius:50px;border:1px solid rgba(0,201,167,0.3);">📍 Auto</button>
+    </div>
+
+    <!-- AQI DASHBOARD CARD -->
+    <div class="glass-card pulse-glow reveal delay-2" style="width:100%;max-width:900px;padding:2.5rem;">
+
+      <!-- Loading state -->
+      <div id="aqiLoading" class="text-center" style="padding:2rem;">
+        <div class="spinner"></div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;">Fetching air quality data…</p>
+      </div>
+
+      <!-- Main AQI Display (hidden until loaded) -->
+      <div id="aqiDisplay" style="display:none;">
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center;">
+
+          <!-- AQI Ring -->
+          <div class="aqi-ring-container float" id="aqiRingWrap" style="position:relative;">
+            <div class="ring-glow-effect"></div>
+            <svg class="aqi-ring-svg" viewBox="0 0 200 200">
+              <circle class="aqi-ring-bg" cx="100" cy="100" r="90" />
+              <circle class="aqi-ring-fill" id="aqiRingFill" cx="100" cy="100" r="90" />
+            </svg>
+            <div class="aqi-ring-inner">
+              <div class="aqi-number" id="aqiNumber">--</div>
+              <div class="aqi-label">AQI US</div>
+              <div class="aqi-status-text" id="aqiStatus">--</div>
+            </div>
+          </div>
+
+          <!-- Info Panel -->
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+              <div>
+                <h2 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;" id="cityDisplay">--</h2>
+                <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.25rem;" id="lastUpdated">--</div>
+              </div>
+              <span class="aqi-badge good" id="aqiBadge">Good</span>
+            </div>
+
+            <!-- Health advice -->
+            <div class="glass-card" style="border-radius:var(--radius-md);padding:1rem 1.25rem;margin-bottom:1.5rem;background:rgba(0,201,167,0.06);" id="healthAdvice">
+              <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-primary);margin-bottom:0.4rem;">❤️ Health Advisory</div>
+              <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6;" id="adviceText">Loading health advice…</p>
+            </div>
+
+            <!-- Mini Pollutant bars -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+              <div class="pollutant-mini" id="pm25Mini">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-secondary);">PM2.5</span><span id="pm25Val" style="font-weight:600;">--</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="pm25Bar" style="width:0;background:linear-gradient(90deg,#00c9a7,#48cae4);"></div></div>
+              </div>
+              <div class="pollutant-mini" id="pm10Mini">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-secondary);">PM10</span><span id="pm10Val" style="font-weight:600;">--</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="pm10Bar" style="width:0;background:linear-gradient(90deg,#00c9a7,#48cae4);"></div></div>
+              </div>
+              <div class="pollutant-mini">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-secondary);">CO</span><span id="coVal" style="font-weight:600;">--</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="coBar" style="width:0;background:linear-gradient(90deg,#f9a825,#e65100);"></div></div>
+              </div>
+              <div class="pollutant-mini">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-secondary);">NO₂</span><span id="no2Val" style="font-weight:600;">--</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="no2Bar" style="width:0;background:linear-gradient(90deg,#8e24aa,#e91e63);"></div></div>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div style="display:flex;gap:0.75rem;margin-top:1.5rem;flex-wrap:wrap;">
+              <a href="details.html" class="btn btn-primary" style="font-size:0.85rem;padding:0.6rem 1.2rem;">🔬 Full Details</a>
+              <a href="forecast.html" class="btn btn-outline" style="font-size:0.85rem;padding:0.6rem 1.2rem;">📅 7-Day Forecast</a>
+              <button class="btn btn-ghost" style="font-size:0.85rem;padding:0.6rem 1.2rem;" onclick="shareAQI()">🔗 Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div id="aqiError" style="display:none;text-align:center;padding:2rem;">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">😔</div>
+        <p style="color:var(--text-secondary);">Could not load AQI data. Please search for a city manually.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AQI SCALE GUIDE ──────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">📊 Reference</div>
+        <h2 class="section-title reveal">AQI <span>Scale</span> Guide</h2>
+        <p class="section-desc reveal">Understanding what AQI levels mean for your health.</p>
+      </div>
+
+      <!-- AD SECTION (TOP) -->
+      <div class="ad-placeholder reveal" style="margin: 2rem 0; text-align:center;">
+        <div style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border-glass); padding: 1rem; border-radius: 12px; color: var(--text-muted); font-size: 0.8rem;">
+          <p>Google AdSense Placeholder (Top Banner)</p>
+          <!-- Paste your AdSense code here -->
+        </div>
+      </div>
+
+      <div class="grid-2 aqi-dashboard-grid mb-4">
+        <!-- Good -->
+        <div class="glass-card card-good reveal delay-1" style="border-top:3px solid var(--aqi-good);">
+          <div style="font-size:2rem;margin-bottom:0.75rem;">🟢</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--aqi-good);">0–50</div>
+          <div style="font-weight:700;margin:0.3rem 0;">Good</div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">Air quality is satisfactory. Ideal for outdoor activities.</p>
+        </div>
+        <!-- Moderate -->
+        <div class="glass-card card-moderate reveal delay-2" style="border-top:3px solid var(--aqi-moderate);">
+          <div style="font-size:2rem;margin-bottom:0.75rem;">🟡</div>
+          <div style="font-size:1.5rem;font-weight:800;color:#e6d100;">51–100</div>
+          <div style="font-weight:700;margin:0.3rem 0;">Moderate</div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">Acceptable quality. Sensitive individuals should limit outdoor exposure.</p>
+        </div>
+        <!-- USG -->
+        <div class="glass-card card-unhealthy reveal delay-3" style="border-top:3px solid #ff7700;">
+          <div style="font-size:2rem;margin-bottom:0.75rem;">🟠</div>
+          <div style="font-size:1.5rem;font-weight:800;color:#ff7700;">101–150</div>
+          <div style="font-weight:700;margin:0.3rem 0;">Unhealthy for Sensitive</div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">Children, elderly, and people with conditions should reduce activity.</p>
+        </div>
+        <!-- Unhealthy -->
+        <div class="glass-card reveal delay-4" style="border-top:3px solid var(--aqi-unhealthy);">
+          <div style="font-size:2rem;margin-bottom:0.75rem;">🔶</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--aqi-unhealthy);">151–200</div>
+          <div style="font-weight:700;margin:0.3rem 0;">Unhealthy</div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">Everyone may experience effects. Mask recommended outdoors.</p>
+        </div>
+        <!-- Very unhealthy -->
+        <div class="glass-card reveal delay-5" style="border-top:3px solid var(--aqi-very-unhealthy);">
+          <div style="font-size:2rem;margin-bottom:0.75rem;">🔴</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--aqi-very-unhealthy);">201–300</div>
+          <div style="font-weight:700;margin:0.3rem 0;">Very Unhealthy</div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">Health alert! Avoid outdoor exercise. Stay indoors.</p>
+        </div>
+        <!-- Hazardous -->
+        <div class="glass-card reveal delay-6" style="border-top:3px solid var(--aqi-hazardous);">
+          <div style="font-size:2rem;margin-bottom:0.75rem;">🟣</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--aqi-hazardous);">301+</div>
+          <div style="font-weight:700;margin:0.3rem 0;">Hazardous</div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;">Emergency conditions. Everyone must stay indoors and wear N95 masks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES STRIP ───────────────────────────────── -->
+  <section class="section" style="padding:3rem 0;">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+        <div class="glass-card text-center reveal" style="padding:1.5rem 1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">📍</div>
+          <div style="font-weight:600;font-size:0.9rem;">Auto Location</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">GPS detection</div>
+        </div>
+        <div class="glass-card text-center reveal delay-1" style="padding:1.5rem 1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">⚡</div>
+          <div style="font-weight:600;font-size:0.9rem;">Real-Time Data</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">Live AQI updates</div>
+        </div>
+        <div class="glass-card text-center reveal delay-2" style="padding:1.5rem 1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">❤️</div>
+          <div style="font-weight:600;font-size:0.9rem;">Health Alerts</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">Smart advisory</div>
+        </div>
+        <div class="glass-card text-center reveal delay-3" style="padding:1.5rem 1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">📈</div>
+          <div style="font-weight:600;font-size:0.9rem;">Forecast</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">7-day outlook</div>
+        </div>
+        <div class="glass-card text-center reveal delay-4" style="padding:1.5rem 1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">🌱</div>
+          <div style="font-weight:600;font-size:0.9rem;">Eco Tracker</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">Green points</div>
+        </div>
+        <div class="glass-card text-center reveal delay-5" style="padding:1.5rem 1rem;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">🌙</div>
+          <div style="font-weight:600;font-size:0.9rem;">Dark Mode</div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">Eye-friendly UI</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUICK STATS ──────────────────────────────────── -->
+  <section class="section" style="padding:3rem 0;">
+    <div class="container">
+      <div class="glass-card" style="padding:2.5rem;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2rem;text-align:center;">
+          <div>
+            <div class="stat-number count-up" data-target="500">0</div>
+            <div class="stat-label">Cities Monitored</div>
+          </div>
+          <div>
+            <div class="stat-number count-up" data-target="24">0</div>
+            <div class="stat-label">Hourly Updates</div>
+          </div>
+          <div>
+            <div class="stat-number count-up" data-target="6">0</div>
+            <div class="stat-label">Pollutants Tracked</div>
+          </div>
+          <div>
+            <div class="stat-number count-up" data-target="7">0</div>
+            <div class="stat-label">Day Forecast</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ECO ACTIONS CTA ──────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="glass-card" style="background:linear-gradient(135deg,rgba(0,201,167,0.12),rgba(0,119,182,0.12));border-color:rgba(0,201,167,0.25);padding:3rem;text-align:center;">
+        <div style="font-size:3rem;margin-bottom:1rem;" class="float">🌱</div>
+        <h2 class="section-title reveal" style="margin-bottom:0.75rem;">Track Your <span>Green Actions</span></h2>
+        <p class="section-desc reveal delay-1" style="margin-bottom:2rem;">Log eco-friendly activities, earn Green Points, and level up your Eco Score. Every action counts!</p>
+        <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;" class="reveal delay-2">
+          <!-- PERSONALIZED REPORT CARD -->
+          <div class="glass-card reveal delay-3" style="flex: 1; max-width: 320px; text-align: left;">
+            <h3 style="font-size:1.1rem; margin-bottom: 0.5rem;">Personal Report</h3>
+            <p style="font-size:0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Analyze your local trends and eco-impact score.</p>
+            <a href="reports.html" class="btn btn-primary w-full" style="font-size:0.8rem; padding: 0.6rem;">📊 Open Report</a>
+          </div>
+
+          <!-- AD SECTION (SIDE) -->
+          <div class="glass-card reveal delay-4" style="flex: 1; max-width: 320px; background: rgba(0,201,167,0.03); border-style: dashed;">
+            <div style="text-align:center; color: var(--text-muted); font-size: 0.75rem;">
+              <p>Promoted Content</p>
+              <div style="height: 120px; border: 1px dashed var(--border-glass); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 0.5rem; background: rgba(0,0,0,0.2);">
+                AdSense Space
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem;" class="reveal delay-5">
+          <a href="eco.html" class="btn btn-primary">🌱 Log New Action</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-name">🌍 AirAware</div>
+        <div style="font-size:0.75rem;color:var(--brand-primary);margin-top:0.2rem;">Smart Air Quality Monitor</div>
+        <p>Empowering communities to understand their air quality and make eco-friendly choices every day.</p>
+        <div style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted);">
+          Developed by <strong style="color:var(--brand-primary);">RGAi Company</strong><br>
+          Created by <strong style="color:var(--brand-primary);">Gauresh Khairnar</strong><br>
+          Innovating Smart & Sustainable Technology 🌍
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Monitor</h4>
+        <a href="index.html">Live AQI</a>
+        <a href="details.html">Pollutant Details</a>
+        <a href="forecast.html">7-Day Forecast</a>
+        <a href="reports.html">Monthly Reports</a>
+      </div>
+      <div class="footer-col">
+        <h4>Eco</h4>
+        <a href="eco.html">Green Tracker</a>
+        <a href="eco.html#calculator">Carbon Calculator</a>
+        <a href="awareness.html">Awareness Hub</a>
+        <a href="awareness.html#waste">Waste Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About RGAi</a>
+        <a href="about.html#creator">About Creator</a>
+        <a href="about.html#contact">Contact</a>
+        <a href="awareness.html">Environmental Info</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 AirAware by RGAi Company. All rights reserved.</div>
+      <div class="footer-credit">
+        Made with 💚 by <strong>Gauresh Khairnar</strong> | <strong>RGAi Company</strong>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="social-btn" title="Share">🔗</a>
+        <a href="#" class="social-btn" title="GitHub">💻</a>
+        <a href="#" class="social-btn" title="Contact">📧</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════════════════════════════ SCRIPTS ══════════ -->
+<script src="js/theme.js"></script>
+<script src="js/app.js"></script>
+<script src="js/animations.js"></script>
+
+<script>
+// ── Inline Boot Script ──────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const l = document.getElementById('page-loader');
+    if (l) l.classList.add('hidden');
+  }, 1400);
+});
+</script>
+
+</body>
+</html>
