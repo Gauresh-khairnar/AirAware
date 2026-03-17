@@ -15,6 +15,9 @@ This is the best way to earn money from your website project.
 4.  **Insert into HTML**: 
     - I have added placeholders in `index.html` labeled `<!-- AD SECTION -->`. 
     - Replace the placeholder `<div>` with your actual Google code.
+5.  **Ads.txt Verification**:
+    - I have created an `ads.txt` file in your root folder. 
+    - This file tells Google that you are the authorized owner of the ad space.
 
 ### Tips for Approval:
 - Ensure you have a **Privacy Policy** page (AdSense requires this).
